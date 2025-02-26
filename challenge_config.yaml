@@ -12,7 +12,7 @@ image: images/logo/challenge_logo.jpg
 
 submission_guidelines: templates/submission_guidelines.html
 
-evaluation_script: evaluation_script/
+evaluation_script: evaluation_script.zip
 
 remote_evaluation: True
 
@@ -97,7 +97,7 @@ challenge_phases:
         type: boolean
         required: True
     is_restricted_to_select_one_submission: False
-    allowed_submission_file_types: [".py", ".zip", ".tar.gz"]
+    allowed_submission_file_types: ".py, .zip, .tar.gz"
 
   - id: 2
     name: Testing Phase
@@ -139,7 +139,7 @@ challenge_phases:
         type: boolean
         required: True
     is_restricted_to_select_one_submission: True
-    allowed_submission_file_types: [".py", ".zip", ".tar.gz"]
+    allowed_submission_file_types: ".py, .zip, .tar.gz"
 
 dataset_splits:
   - id: 1
