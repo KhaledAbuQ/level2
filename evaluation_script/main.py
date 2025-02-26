@@ -323,13 +323,13 @@ def evaluate(test_annotation_file, user_submission_file, phase_codename, **kwarg
         
         output = {"result": [], "submission_result": error_metrics}
         
-        if phase_codename == "dev_phase":
+        if phase_codename == "dev_phase":  
             output["result"].append({
-                "dev_split": error_metrics
+                "dev_split": metrics  
             })
-        elif phase_codename == "test_phase":
+        elif phase_codename == "test_phase": 
             output["result"].append({
-                "test_split": error_metrics
+                "test_split": metrics  
             })
             
         return output
