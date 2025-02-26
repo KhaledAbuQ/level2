@@ -8,7 +8,7 @@ evaluation_details: templates/evaluation_details.html
 
 terms_and_conditions: templates/terms_and_conditions.html
 
-image: images/logo/challenge_logo.jpg
+image: images/logo.png
 
 submission_guidelines: templates/submission_guidelines.html
 
