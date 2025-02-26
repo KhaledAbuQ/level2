@@ -1,39 +1,57 @@
-title: Confidential Test Data Challenge
-short_description: A challenge with hidden test data to prevent manual labeling.
+title: One-Shot Facial Recognition Challenge
+
+short_description: Develop a model that can recognize faces with only one example per person.
+
 description: templates/description.html
+
 evaluation_details: templates/evaluation_details.html
+
 terms_and_conditions: templates/terms_and_conditions.html
-image: images/logo.jpg
+
+image: images/logo/challenge_logo.jpg
+
 submission_guidelines: templates/submission_guidelines.html
-evaluation_script: evaluation_script.zip
-remote_evaluation: False
-is_docker_based: False
-start_date: 2025-03-01 00:00:00
-end_date: 2025-12-31 23:59:59
-published: True
+
+evaluation_script: evaluation_script/
+
+remote_evaluation: True
+
+is_docker_based: True
+
+is_static_dataset_code_upload: True
+
+start_date: 2025-03-15 00:00:00
+
+end_date: 2025-05-15 23:59:59
+
+published: False
+
+allowed_email_domains: []  # Empty list means all email domains are allowed
+
+blocked_emails_domains: []  # No blocked domains
 
 leaderboard:
   - id: 1
     schema:
       {
-        "labels": ["Accuracy", "Precision", "Recall", "F1-Score"],
-        "default_order_by": "F1-Score",
+        "labels": ["Accuracy", "F1 Score", "Processing Time (s)", "Total"],
+        "default_order_by": "Total",
         "metadata": {
           "Accuracy": {
             "sort_ascending": False,
-            "description": "Proportion of correct predictions.",
+            "description": "Classification accuracy across all test images",
           },
-          "Precision": {
+          "F1 Score": {
             "sort_ascending": False,
-            "description": "Proportion of true positive predictions.",
+            "description": "F1 score (harmonic mean of precision and recall)",
           },
-          "Recall": {
-            "sort_ascending": False,
-            "description": "Proportion of actual positives correctly identified.",
+          "Processing Time (s)": {
+            "sort_ascending": True,
+            "description": "Average processing time per image in seconds",
           },
-          "F1-Score": {
+          "Total": {
             "sort_ascending": False,
-            "description": "Harmonic mean of Precision and Recall.",
+            "description": "Weighted sum of metrics (0.5*Accuracy + 0.3*F1 + 0.2*Time)",
           }
         }
       }
@@ -42,54 +60,14 @@ challenge_phases:
   - id: 1
     name: Development Phase
     description: templates/challenge_phase_1_description.html
-    leaderboard_public: False
-    is_public: True
-    is_submission_public: False
-    start_date: 2025-03-01 00:00:00
-    end_date: 2025-06-30 23:59:59
-    test_annotation_file: annotations/test_annotations_dev.json
-    codename: dev_phase
-    max_submissions_per_day: 5
-    max_submissions_per_month: 50
-    max_submissions: 100
-    default_submission_meta_attributes:
-      - name: method_name
-        is_visible: True
-      - name: method_description
-        is_visible: True
-      - name: project_url
-        is_visible: False
-      - name: publication_url
-        is_visible: False
-    submission_meta_attributes:
-      - name: ModelArchitecture
-        description: Describe your model architecture.
-        type: text
-        required: True
-      - name: TrainingData
-        description: Specify the data used for training.
-        type: text
-        required: True
-      - name: ExternalData
-        description: Did you use any external data? If yes, provide details.
-        type: boolean
-        required: True
-    is_restricted_to_select_one_submission: True
-    is_partial_submission_evaluation_enabled: False
-    allowed_submission_file_types: ".zip, .tar.gz"
-
-  - id: 2
-    name: Testing Phase
-    description: templates/challenge_phase_2_description.html
     leaderboard_public: True
     is_public: True
     is_submission_public: False
-    start_date: 2025-07-01 00:00:00
-    end_date: 2025-12-31 23:59:59
-    test_annotation_file: annotations/test_annotations_test.json
-    codename: test_phase
-    max_submissions_per_day: 2
-    max_submissions_per_month: 20
+    start_date: 2025-03-15 00:00:00
+    end_date: 2025-04-15 23:59:59
+    test_annotation_file: annotations/test_annotations_devsplit.json
+    codename: dev_phase
+    max_submissions_per_day: 5
     max_submissions: 50
     default_submission_meta_attributes:
       - name: method_name
@@ -97,44 +75,90 @@ challenge_phases:
       - name: method_description
         is_visible: True
       - name: project_url
-        is_visible: False
+        is_visible: True
       - name: publication_url
-        is_visible: False
+        is_visible: True
     submission_meta_attributes:
-      - name: ModelVersion
-        description: Version of the model submitted.
-        type: text
+      - name: ModelArchitecture
+        description: Type of model architecture used
+        type: radio
+        options: ["CNN", "Vision Transformer", "ResNet", "Siamese Network", "Other"]
         required: True
-      - name: TrainingData
-        description: Specify the data used for training.
-        type: text
+      - name: PretrainedModel
+        description: Was a pre-trained model used?
+        type: boolean
         required: True
-      - name: ExternalData
-        description: Did you use any external data? If yes, provide details.
+      - name: DataAugmentation
+        description: Data augmentation techniques used
+        type: checkbox
+        options: ["Rotation", "Flipping", "Color Jitter", "None"]
+      - name: AdditionalTrainingData
+        description: Any additional training data used?
+        type: boolean
+        required: True
+    is_restricted_to_select_one_submission: False
+    allowed_submission_file_types: [".py", ".zip", ".tar.gz"]
+
+  - id: 2
+    name: Testing Phase
+    description: templates/challenge_phase_2_description.html
+    leaderboard_public: True
+    is_public: True
+    is_submission_public: False
+    start_date: 2025-04-16 00:00:00
+    end_date: 2025-05-15 23:59:59
+    test_annotation_file: annotations/test_annotations_testsplit.json
+    codename: test_phase
+    max_submissions_per_day: 2
+    max_submissions: 10
+    default_submission_meta_attributes:
+      - name: method_name
+        is_visible: True
+      - name: method_description
+        is_visible: True
+      - name: project_url
+        is_visible: True
+      - name: publication_url
+        is_visible: True
+    submission_meta_attributes:
+      - name: ModelArchitecture
+        description: Type of model architecture used
+        type: radio
+        options: ["CNN", "Vision Transformer", "ResNet", "Siamese Network", "Other"]
+        required: True
+      - name: PretrainedModel
+        description: Was a pre-trained model used?
+        type: boolean
+        required: True
+      - name: DataAugmentation
+        description: Data augmentation techniques used
+        type: checkbox
+        options: ["Rotation", "Flipping", "Color Jitter", "None"]
+      - name: AdditionalTrainingData
+        description: Any additional training data used?
         type: boolean
         required: True
     is_restricted_to_select_one_submission: True
-    is_partial_submission_evaluation_enabled: False
-    allowed_submission_file_types: ".zip, .tar.gz"
+    allowed_submission_file_types: [".py", ".zip", ".tar.gz"]
 
 dataset_splits:
   - id: 1
     name: Development Split
     codename: dev_split
   - id: 2
-    name: Testing Split
+    name: Test Split
     codename: test_split
 
 challenge_phase_splits:
   - challenge_phase_id: 1
     leaderboard_id: 1
     dataset_split_id: 1
-    visibility: 2
-    leaderboard_decimal_precision: 2
-    is_leaderboard_order_descending: False
+    visibility: 3
+    leaderboard_decimal_precision: 4
+    is_leaderboard_order_descending: True
   - challenge_phase_id: 2
     leaderboard_id: 1
     dataset_split_id: 2
     visibility: 3
-    leaderboard_decimal_precision: 2
-    is_leaderboard_order_descending: False
+    leaderboard_decimal_precision: 4
+    is_leaderboard_order_descending: True
