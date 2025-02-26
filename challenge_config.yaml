@@ -1,48 +1,45 @@
-# If you are not sure what all these fields mean, please refer our documentation here:
-# https://evalai.readthedocs.io/en/latest/configuration.html
-title: Random Number Generator Challenge
-short_description: Random number generation challenge for each submission
+title: Hidden Test Image Evaluation Challenge
+short_description: Evaluate models on hidden test images without data leakage.
 description: templates/description.html
 evaluation_details: templates/evaluation_details.html
 terms_and_conditions: templates/terms_and_conditions.html
 image: logo.jpg
 submission_guidelines: templates/submission_guidelines.html
-leaderboard_description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras egestas a libero nec sagittis.
+leaderboard_description: Submissions are scored on a hidden test set to prevent manual labeling.
 evaluation_script: evaluation_script.zip
-remote_evaluation: False
-is_docker_based: False
-start_date: 2019-01-01 00:00:00
-end_date: 2099-05-31 23:59:59
+remote_evaluation: True
+is_docker_based: True
+start_date: 2025-03-01 00:00:00
+end_date: 2025-06-01 23:59:59
 published: True
 
 leaderboard:
   - id: 1
-    schema:
-      {
-        "labels": ["Metric1", "Metric2", "Metric3", "Total"],
-        "default_order_by": "Total",
-        "metadata": {
-          "Metric1": {
-            "sort_ascending": True,
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          },
-          "Metric2": {
-            "sort_ascending": True,
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          }
+    schema: {
+      "labels": ["Accuracy", "F1 Score", "Overall Score"],
+      "default_order_by": "Overall Score",
+      "metadata": {
+        "Accuracy": {
+          "sort_ascending": False,
+          "description": "Model accuracy on hidden test images."
+        },
+        "F1 Score": {
+          "sort_ascending": False,
+          "description": "Harmonic mean of precision and recall."
         }
       }
+    }
 
 challenge_phases:
   - id: 1
-    name: Dev Phase
+    name: Development Phase
     description: templates/challenge_phase_1_description.html
-    leaderboard_public: False
+    leaderboard_public: True
     is_public: True
-    is_submission_public: True
-    start_date: 2019-01-19 00:00:00
-    end_date: 2099-04-25 23:59:59
-    test_annotation_file: annotations/test_annotations_devsplit.json
+    is_submission_public: False
+    start_date: 2025-03-01 00:00:00
+    end_date: 2025-04-15 23:59:59
+    test_annotation_file: annotations/dev_split_annotations.json
     codename: dev
     max_submissions_per_day: 5
     max_submissions_per_month: 50
@@ -57,34 +54,27 @@ challenge_phases:
       - name: publication_url
         is_visible: True
     submission_meta_attributes:
-      - name: TextAttribute
-        description: Sample
+      - name: Model Description
+        description: Brief description of your model.
         type: text
-        required: False
-      - name: SingleOptionAttribute
-        description: Sample
-        type: radio
-        options: ["A", "B", "C"]
-      - name: MultipleChoiceAttribute
-        description: Sample
-        type: checkbox
-        options: ["alpha", "beta", "gamma"]
-      - name: TrueFalseField
-        description: Sample
-        type: boolean
         required: True
+      - name: Framework
+        description: Framework used (e.g., TensorFlow, PyTorch).
+        type: radio
+        options: ["TensorFlow", "PyTorch", "Other"]
     is_restricted_to_select_one_submission: False
     is_partial_submission_evaluation_enabled: False
     allowed_submission_file_types: ".json, .zip, .txt, .tsv, .gz, .csv, .h5, .npy, .npz"
+
   - id: 2
-    name: Test Phase
+    name: Final Evaluation Phase
     description: templates/challenge_phase_2_description.html
-    leaderboard_public: True
+    leaderboard_public: False
     is_public: True
-    is_submission_public: True
-    start_date: 2019-01-01 00:00:00
-    end_date: 2099-05-24 23:59:59
-    test_annotation_file: annotations/test_annotations_testsplit.json
+    is_submission_public: False
+    start_date: 2025-04-16 00:00:00
+    end_date: 2025-06-01 23:59:59
+    test_annotation_file: annotations/test_annotations_hidden.json
     codename: test
     max_submissions_per_day: 5
     max_submissions_per_month: 50
@@ -99,39 +89,27 @@ challenge_phases:
       - name: publication_url
         is_visible: True
     submission_meta_attributes:
-      - name: TextAttribute
-        description: Sample
+      - name: Model Description
+        description: Brief description of your model.
         type: text
-      - name: SingleOptionAttribute
-        description: Sample
+        required: True
+      - name: Framework
+        description: Framework used (e.g., TensorFlow, PyTorch).
         type: radio
-        options: ["A", "B", "C"]
-      - name: MultipleChoiceAttribute
-        description: Sample
-        type: checkbox
-        options: ["alpha", "beta", "gamma"]
-      - name: TrueFalseField
-        description: Sample
-        type: boolean
+        options: ["TensorFlow", "PyTorch", "Other"]
     is_restricted_to_select_one_submission: False
     is_partial_submission_evaluation_enabled: False
 
 dataset_splits:
   - id: 1
-    name: Train Split
+    name: Training Split
     codename: train_split
   - id: 2
-    name: Test Split
+    name: Hidden Test Split
     codename: test_split
 
 challenge_phase_splits:
   - challenge_phase_id: 1
-    leaderboard_id: 1
-    dataset_split_id: 1
-    visibility: 1
-    leaderboard_decimal_precision: 2
-    is_leaderboard_order_descending: True
-  - challenge_phase_id: 2
     leaderboard_id: 1
     dataset_split_id: 1
     visibility: 3
